@@ -2,7 +2,7 @@
 // Cambia esta URL a la de Railway cuando hagas deploy
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:8000'
-  : 'https://TU-APP.up.railway.app';  // ← reemplazar al hacer deploy
+  : 'https://superstore-analytics-production.up.railway.app';  // ← reemplazar al hacer deploy
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let filters = { year: '', category: '', region: '', segment: '', market: '' };
