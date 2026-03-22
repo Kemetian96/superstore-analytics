@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Superstore Analytics — Portfolio</title>
+<meta name="description" content="Interactive analytics dashboard built with FastAPI, PostgreSQL and Chart.js. Kaggle Global Superstore dataset.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="brand-logo">SS</div>
+      <div>
+        <div class="brand-name">SUPERSTORE ANALYTICS</div>
+        <div class="brand-sub">PORTFOLIO PROJECT · FULLSTACK + DATA</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="header-tag">Dataset: <span>Kaggle · 51K rows</span></div>
+      <div class="header-tag">Stack: <span>FastAPI · PostgreSQL · Chart.js</span></div>
+      <div class="header-tag" id="current-date"></div>
+    </div>
+  </header>
+
+  <!-- FILTROS -->
+  <div class="filters-bar">
+    <span class="filter-label">Filtros →</span>
+
+    <select class="filter-select" id="f-year">
+      <option value="">Cargando...</option>
+    </select>
+
+    <select class="filter-select" id="f-category">
+      <option value="">Cargando...</option>
+    </select>
+
+    <select class="filter-select" id="f-region">
+      <option value="">Cargando...</option>
+    </select>
+
+    <select class="filter-select" id="f-segment">
+      <option value="">Cargando...</option>
+    </select>
+
+    <select class="filter-select" id="f-market">
+      <option value="">Cargando...</option>
+    </select>
+
+    <button class="btn-reset" onclick="resetFilters()">✕ Reset</button>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Sales</div>
+        <div class="kpi-value accent" id="kpi-sales">—</div>
+        <div class="kpi-sub">gross revenue</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Profit</div>
+        <div class="kpi-value" id="kpi-profit">—</div>
+        <div class="kpi-sub">net earnings</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Profit Margin</div>
+        <div class="kpi-value" id="kpi-margin">—</div>
+        <div class="kpi-sub">profit / sales</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Orders</div>
+        <div class="kpi-value" id="kpi-orders">—</div>
+        <div class="kpi-sub">unique order IDs</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Discount</div>
+        <div class="kpi-value" id="kpi-discount">—</div>
+        <div class="kpi-sub">mean discount rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Rows</div>
+        <div class="kpi-value" id="kpi-rows">—</div>
+        <div class="kpi-sub">line items</div>
+      </div>
+    </div>
+
+    <!-- FILA 1: Ventas por mes + Categorías donut -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Sales & Profit Over Time</div>
+            <div class="chart-subtitle">Monthly aggregation · all years</div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas id="chart-monthly"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Sales by Category</div>
+            <div class="chart-subtitle">Revenue distribution</div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas id="chart-category"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILA 2: Región + Tendencia anual + Segmentos -->
+    <div class="charts-grid-3">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Sales by Region</div>
+            <div class="chart-subtitle">Grouped bar · sales vs profit</div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas id="chart-region"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Yearly Trend</div>
+            <div class="chart-subtitle">Sales volume + margin %</div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas id="chart-trend"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Customer Segments</div>
+            <div class="chart-subtitle">Polar area · revenue share</div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas id="chart-segment"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILA 3: Subcategorías + Top países -->
+    <div class="charts-grid">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Sub-Category Breakdown</div>
+          <div class="table-meta">Sales · Profit · Margin</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Category</th>
+              <th>Sub-Category</th>
+              <th>Sales</th>
+              <th>Profit</th>
+              <th>Margin</th>
+            </tr></thead>
+            <tbody id="cat-tbody">
+              <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Top 10 Countries</div>
+          <div class="table-meta">by revenue</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th>
+              <th>Country</th>
+              <th>Region</th>
+              <th>Sales</th>
+              <th>Profit</th>
+            </tr></thead>
+            <tbody id="countries-tbody">
+              <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA PRINCIPAL -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">Order Details</div>
+        <div class="table-meta" id="page-info">—</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Country</th>
+            <th>Category</th>
+            <th>Sales</th>
+            <th>Profit</th>
+            <th>Ship Mode</th>
+          </tr></thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>
+      Built with FastAPI · PostgreSQL · Chart.js ·
+      <a href="https://www.kaggle.com/datasets/apoorvaappz/global-super-store-dataset" target="_blank">Kaggle Dataset</a>
+    </span>
+    <span>
+      <a href="https://github.com/Kemetian96/superstore-analytics" target="_blank">View on GitHub →</a>
+    </span>
+  </footer>
+
+</div>
+<script src="static/js/dashboard.js"></script>
+</body>
+</html>
