@@ -9,7 +9,7 @@
 
 ## Capturas de pantalla
 
-> *(agrega capturas aquí una vez desplegado)*
+![alt text](image.png)
 
 ---
 

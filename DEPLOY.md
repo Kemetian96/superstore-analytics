@@ -132,7 +132,7 @@ Tres URLs para poner en tu CV y LinkedIn.
 
 
 
-## Problemas comunes
+## Problemas comunes    
 
 **CORS error en el browser**
 El backend ya tiene CORS abierto (`allow_origins=["*"]`), no deberías tener problemas.
