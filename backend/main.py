@@ -36,9 +36,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["GET"],
-    allow_headers=["*"],
+    allow_origins=[
+        "https://kemetian96.github.io",
+        "http://localhost:3000",
+        "http://127.0.0.1:5500",
+    ],
 )
 
 # ── DB HELPER ─────────────────────────────────────────────────────────────────
