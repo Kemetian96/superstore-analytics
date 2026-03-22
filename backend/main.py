@@ -41,6 +41,8 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:5500",
     ],
+    allow_methods=["GET"],
+    allow_headers=["*"],
 )
 
 # ── DB HELPER ─────────────────────────────────────────────────────────────────
