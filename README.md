@@ -3,7 +3,7 @@
 > Dashboard analítico fullstack construido con FastAPI, PostgreSQL y Chart.js  
 > Dataset: [Kaggle Global Superstore](https://www.kaggle.com/datasets/apoorvaappz/global-super-store-dataset) — más de 51,000 filas
 
-**[🔴 Live Demo](https://TU-APP.up.railway.app)** · **[API Docs](https://TU-APP.up.railway.app/docs)**
+**[🔴 Live Demo](https://kemetian96.github.io/superstore-analytics/frontend/)** · **[API Docs](https://superstore-analytics.up.railway.app/docs)**
 
 ---
 

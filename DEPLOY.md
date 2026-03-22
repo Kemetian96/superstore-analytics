@@ -130,17 +130,7 @@ Tres URLs para poner en tu CV y LinkedIn.
 
 ---
 
-## Verificar que todo funciona
 
-```bash
-# Health check
-curl https://tu-app.up.railway.app/api/health
-
-# Debe responder:
-# {"status":"ok","rows":51290}
-```
-
----
 
 ## Problemas comunes
 
